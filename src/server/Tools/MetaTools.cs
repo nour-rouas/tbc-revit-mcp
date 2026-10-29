@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Bimwright.Targeting;
+using RvtMcp.Targeting;
 using ModelContextProtocol.Server;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,6 +14,13 @@ namespace RvtMcp.Server
     [McpServerToolType, Toolset("meta")]
     public class MetaTools
     {
+        [McpServerTool(Name = "revit_api_lookup", ReadOnly = true, Destructive = false, Idempotent = true, OpenWorld = false), System.ComponentModel.Description(
+            "Look up Revit API types and members in the running Revit (exact year): signatures, static/obsolete flags and XML-doc summaries. " +
+            "Call before writing send_code instead of guessing member names. query: 'BalusterPattern', 'Autodesk.Revit.DB.View3D', or 'Type.MemberPrefix' such as 'CompoundStructure.GetLayer'. " +
+            "No exact match returns candidates; include_inherited adds base-class members; max_members 1-300 (default 80).")]
+        public static async Task<string> ApiLookup(string query, bool include_inherited = false, int max_members = 80)
+            => await ToolGateway.CallAsync("api_lookup", new { query, include_inherited, max_members });
+
         [McpServerTool(Name = "revit_list_recent_models", ReadOnly = true, Destructive = false, Idempotent = true, OpenWorld = false), System.ComponentModel.Description(
             "List up to 50 recent model paths from this Revit's Revit.ini, most recent first, even without an open document. " +
             "Confirm the intended absolute path before calling revit_open_model.")]
@@ -167,7 +174,7 @@ namespace RvtMcp.Server
                     count = targets.Length,
                     targets,
                     note = targets.Length == 0
-                        ? "No revit-*.json descriptors found. Start Revit and ensure the rvt-mcp plugin is loaded (Add-Ins ribbon)."
+                        ? "No revit-*.json descriptors found. Start Revit and ensure the tbc-revit-mcp plugin is loaded (Add-Ins ribbon)."
                         : ServerState.IsReadOnly ? ServerState.ReadOnlyTargetGuidance
                         : "Pin an instance with revit_switch_target — 'version' accepts a 4-digit year, 'pid:<n>' or 'id:<target_id>'. When several instances share a year, always pin with pid:<n>.",
                     update_available = UpdateStatus.ForStatusResult()

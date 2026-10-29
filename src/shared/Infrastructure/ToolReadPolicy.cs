@@ -7,14 +7,15 @@ namespace RvtMcp.Plugin
     public static class ToolReadPolicy
     {
         public const string AddinPairingRequired = "PAIRING_REQUIRED: the selected Revit add-in does not support the gateway's required safety protocols. "
-            + "Update the gateway and Revit add-in together from the same rvt-mcp Setup release, restart Revit, and reconnect/restart the MCP client. No model mutation was started.";
-        public const string GatewayPairingRequired = "PAIRING_REQUIRED: the command was not started. The connected rvt-mcp gateway does not support the safety protocols required by this Revit add-in. "
-            + "Update the gateway and Revit add-in together from the same rvt-mcp Setup release, restart Revit, and reconnect/restart the MCP client.";
+            + "Update the gateway and Revit add-in together from the same tbc-revit-mcp Setup release, restart Revit, and reconnect/restart the MCP client. No model mutation was started.";
+        public const string GatewayPairingRequired = "PAIRING_REQUIRED: the command was not started. The connected tbc-revit-mcp gateway does not support the safety protocols required by this Revit add-in. "
+            + "Update the gateway and Revit add-in together from the same tbc-revit-mcp Setup release, restart Revit, and reconnect/restart the MCP client.";
 
         public static readonly ISet<string> ReadOnlyCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "analyze_usage_patterns",
             "activate_view",
+            "api_lookup",
             "ai_element_filter",
             "analyze_geometry_complexity",
             "analyze_mep_network",
@@ -40,6 +41,7 @@ namespace RvtMcp.Plugin
             "health",
             "get_current_view_info",
             "get_change_records",
+            "get_compound_structure",
             "get_failure_records",
             "get_operation_status",
             "lookup_message",
@@ -60,6 +62,7 @@ namespace RvtMcp.Plugin
             "get_panel_schedule",
             "get_print_settings",
             "get_project_coordinate_system",
+            "get_railing_structure",
             "get_room_boundaries",
             "get_room_openings",
             "get_schedulable_fields",
